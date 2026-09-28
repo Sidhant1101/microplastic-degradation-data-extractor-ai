@@ -1,62 +1,32 @@
-# microplastic-degradation-data-extractor-ai
-AI-powered tool for extracting structured experimental data from microplastic research papers and converting PDFs into ML-ready datasets.
-# 🧪 Microplastic AI Extractor
+# 🧪 Microplastic Degradation Data Extractor AI
 
-**AI-powered extraction of structured experimental data from microplastic research papers.**
+**AI-powered tool for extracting structured experimental data from microplastic research papers and converting PDFs into ML-ready datasets.**
 
-> **PDF → Scientific Information Extraction → Structured Experiments → Validation → CSV/JSON → ML-ready Dataset**
-
-This project is being developed to build a reliable research dataset for studying **microplastic degradation and treatment** using machine learning.
-
-The system extracts experimental information from scientific research papers and converts unstructured PDF content into structured experimental records while preserving **evidence, units, experimental conditions, and provenance**.
+> **PDF → AI Extraction → Structured Experiments → Validation → Evidence → CSV/JSON → ML-ready Dataset**
 
 ---
 
-## 🎯 Project Goal
+## 🎯 Project Overview
 
-Scientific literature contains a large amount of experimental information, but this information is usually stored in:
+Scientific information about microplastic degradation is distributed across research papers, tables, figures, supplementary information, and different experimental conditions.
 
-* PDF paragraphs
-* tables
-* figures
-* supplementary information
-* different units
-* inconsistent terminology
-* different experimental conditions
+Manually collecting this information from hundreds of papers is:
 
-Manually collecting this information for hundreds of papers is slow and error-prone.
+* Time-consuming
+* Repetitive
+* Difficult to standardize
+* Prone to transcription errors
+* Difficult to reproduce
 
-The goal of this project is to create an automated pipeline that can transform:
+This project aims to automate the first stage of building a research dataset by extracting experimental information from scientific papers and converting it into structured records.
 
-```text
-Scientific Research Paper
-        ↓
-       PDF
-        ↓
-   Text Extraction
-        ↓
-    AI Extraction
-        ↓
-Structured Experiments
-        ↓
-Normalization
-        ↓
-Validation
-        ↓
-Evidence / Provenance
-        ↓
-     CSV / JSON
-        ↓
-  ML-ready Dataset
-```
-
-The long-term objective is to use the resulting dataset for **machine-learning models that can analyze and predict microplastic degradation behavior**.
+The long-term goal is to create a **traceable and scientifically useful dataset for machine-learning analysis of microplastic degradation and treatment**.
 
 ---
 
-# 🔬 Target Research Area
+# 🔬 Research Focus
 
-The project focuses primarily on microplastic degradation and treatment involving polymers such as:
+The project primarily focuses on microplastic degradation and treatment involving:
 
 | Polymer                    | Abbreviation |
 | -------------------------- | ------------ |
@@ -67,63 +37,136 @@ The project focuses primarily on microplastic degradation and treatment involvin
 | Polyvinyl chloride         | PVC          |
 | Polyamide / Nylon          | PA           |
 
-The extraction framework can also process related environmental-treatment experiments when relevant.
+The framework can also be extended to other environmental-treatment studies.
 
 ---
 
-# 🚀 Current Features
+# 🤖 AI Providers
 
-### 📄 Multiple PDF Upload
+The project was developed and tested using multiple AI approaches.
 
-Upload multiple research papers simultaneously.
+## 1. OpenAI
 
-```text
-Paper_01.pdf
-Paper_02.pdf
-Paper_03.pdf
-...
-```
+**First approach tested**
 
-The application processes each paper individually and combines the extracted experiments.
+OpenAI was initially used for scientific information extraction because of its structured-output capabilities and strong language understanding.
+
+However, for processing a large number of research papers, API usage can become **expensive**, especially when large PDF contents are processed repeatedly.
+
+Therefore, OpenAI remains supported as an optional provider rather than the primary large-scale extraction solution.
 
 ---
 
-### 🤖 Multiple AI Providers
+## 2. Ollama
 
-The application supports:
+**Second approach tested**
 
-#### Ollama
+Ollama was introduced to provide a local AI extraction option.
 
-Runs locally on your computer.
-
-Advantages:
-
-* No OpenAI API credits required
-* Local processing
-* Useful for development and experimentation
-* Works offline after the model has been downloaded
-
-Current default model:
+Current model:
 
 ```text
 llama3.1:8b
 ```
 
-#### OpenAI
+Advantages:
 
-The project also contains an OpenAI extraction backend.
+* Runs locally
+* No OpenAI API credits required
+* Useful for development
+* Greater control over local processing
+* No per-request API cost
 
-OpenAI requires:
+However, during testing, local extraction was **slower**, particularly for larger scientific papers.
 
-* an API key
-* available API credits
-* a compatible model
+Therefore, Ollama is useful for local experimentation and testing but may not be ideal for high-volume extraction on limited hardware.
 
 ---
 
-# 📊 Extracted Information
+## 3. Grok API
 
-The extractor attempts to identify information such as:
+**Current fast-extraction approach**
+
+The project also supports the **Grok API from xAI** for faster cloud-based extraction.
+
+The motivation for adding Grok was to find a practical balance between:
+
+```text
+OpenAI
+↓
+Strong extraction but higher API cost
+
+Ollama
+↓
+Local and no API cost but slower
+
+Grok API
+↓
+Fast cloud-based extraction for large-scale processing
+```
+
+The Grok API requires an API key/token and should be configured through environment variables rather than being written directly into the source code.
+
+### Provider Comparison
+
+| Provider | Processing | Cost Model        | Main Use                        |
+| -------- | ---------- | ----------------- | ------------------------------- |
+| OpenAI   | Cloud API  | API usage         | High-quality testing/comparison |
+| Ollama   | Local      | No API usage cost | Local development               |
+| Grok API | Cloud API  | API usage         | Faster large-scale extraction   |
+
+> **Note:** Actual speed, cost, and extraction quality depend on the model, paper size, hardware, API limits, and configuration.
+
+---
+
+# 🧠 Extraction Pipeline
+
+The overall pipeline is:
+
+```text
+                    Research Paper
+                          │
+                          ▼
+                         PDF
+                          │
+                          ▼
+                  PDF Text Extraction
+                          │
+                          ▼
+               ┌─────────────────────┐
+               │    AI Provider      │
+               │                     │
+               │  OpenAI / Ollama   │
+               │      / Grok        │
+               └─────────┬───────────┘
+                         │
+                         ▼
+                Structured Experiments
+                         │
+                         ▼
+                    Normalization
+                         │
+                         ▼
+                     Validation
+                         │
+                         ▼
+                Evidence / Provenance
+                         │
+                         ▼
+                    JSON / CSV
+                         │
+                         ▼
+                  Research Dataset
+                         │
+                         ▼
+                    ML Pipeline
+```
+
+---
+
+# 📊 Information Extracted
+
+The system is designed to extract information including:
 
 ### Polymer Information
 
@@ -148,7 +191,7 @@ The extractor attempts to identify information such as:
 * Initial mass
 * Final mass
 
-### Results
+### Experimental Results
 
 * Degradation
 * Removal
@@ -159,32 +202,32 @@ The extractor attempts to identify information such as:
 ### Measurement Information
 
 * Measurement method
-* Reported value
+* Numerical value
 * Unit
 
-### Scientific Provenance
+### Provenance
 
+* Source PDF
 * Evidence text
 * Page number
 * Table reference
 * Figure reference
-* Source PDF
 
 ---
 
 # ⚠️ Scientific Data Integrity
 
-A major design principle of this project is:
+One of the most important principles of this project is:
 
-> **Do not guess missing scientific information.**
+> **Never invent missing scientific information.**
 
-If a research paper does not report a value, the extractor should return:
+If a paper does not report a value, the system should return:
 
 ```json
 null
 ```
 
-instead of inventing a value.
+rather than estimating or guessing the value.
 
 For example:
 
@@ -197,15 +240,15 @@ For example:
 }
 ```
 
-Here, `pH` was not reported or could not be confidently extracted.
+Here, `pH` is `null` because the value was not confidently extracted.
 
-This is important because fabricated values could introduce serious errors into the final machine-learning dataset.
+This is particularly important because incorrect values can introduce bias and noise into a machine-learning dataset.
 
 ---
 
-# 🧠 Example Structured Experiment
+# 🧪 Example Structured Experiment
 
-An extracted experiment may look like:
+A structured experiment can contain:
 
 ```json
 {
@@ -236,14 +279,14 @@ An extracted experiment may look like:
 }
 ```
 
-The actual output depends entirely on what is reported in the paper.
+The actual extracted values depend entirely on what is reported in the source paper.
 
 ---
 
-# 🏗️ Project Architecture
+# 🏗️ Project Structure
 
 ```text
-microplastic_ai_extractor/
+microplastic-degradation-data-extractor-ai/
 │
 ├── app/
 │   ├── __init__.py
@@ -272,23 +315,26 @@ microplastic_ai_extractor/
 
 ---
 
-# 🔄 Extraction Pipeline
+# 🔄 Extraction Workflow
 
-## 1. Upload PDF
+## Step 1 — Upload Research Papers
 
-Research papers are uploaded through the Streamlit interface.
+The Streamlit application supports multiple PDF uploads.
 
 ```text
-PDF
- ↓
-Streamlit uploader
+Paper_01.pdf
+Paper_02.pdf
+Paper_03.pdf
+...
 ```
+
+Each paper is processed individually.
 
 ---
 
-## 2. PDF Processing
+## Step 2 — Extract PDF Text
 
-For Ollama, the current implementation uses **PyMuPDF** to extract the text layer from the PDF.
+The current Ollama implementation uses **PyMuPDF** to extract the PDF text layer.
 
 ```text
 PDF
@@ -298,73 +344,69 @@ PyMuPDF
 Page-by-page text
 ```
 
-Page information is retained so that extracted evidence can be associated with a page.
-
 ---
 
-## 3. AI Extraction
+## Step 3 — AI Extraction
 
-The extracted text is passed to the selected AI model.
+The extracted content is passed to the selected AI provider.
 
 ```text
-Scientific text
-       ↓
-Extraction prompt
-       ↓
-AI model
-       ↓
+Scientific Text
+      ↓
+Extraction Prompt
+      ↓
+AI Model
+      ↓
 Structured JSON
 ```
 
-The model is instructed to:
+The extraction prompt instructs the model to:
 
-* extract experiments separately
+* identify separate experiments
 * preserve units
 * avoid guessing
-* return `null` for missing information
+* use `null` for missing information
 * preserve evidence where possible
 
 ---
 
-## 4. Schema Validation
+## Step 4 — Schema Validation
 
-The extracted response is validated using **Pydantic**.
+The response is validated using **Pydantic**.
 
-The main objects are:
+The main structure is:
 
 ```text
 ExtractionResult
        ↓
-Experiment
+   Experiment
        ↓
-Endpoint
+    Endpoint
 ```
 
-This helps ensure that the AI output follows the expected structure.
+This helps keep the AI output consistent.
 
 ---
 
-## 5. Normalization
+## Step 5 — Normalization
 
-Different ways of writing the same polymer are converted into standardized abbreviations.
-
-For example:
+Different names for the same polymer are standardized.
 
 ```text
-Polyethylene → PE
-Polypropylene → PP
-Polystyrene → PS
+Polyethylene               → PE
+Polypropylene              → PP
+Polystyrene                → PS
 Polyethylene terephthalate → PET
-Polyvinyl chloride → PVC
-Polyamide → PA
-Nylon → PA
+Polyvinyl chloride         → PVC
+Polyamide                  → PA
+Nylon                      → PA
 ```
 
 ---
 
-## 6. Validation
+## Step 6 — Validation
 
-Basic scientific consistency checks are performed.
+Basic consistency checks are performed.
 
 Examples:
 
@@ -383,26 +425,26 @@ Warnings are displayed in the Streamlit interface.
 
 ## Requirements
 
-Recommended environment:
+Recommended:
 
-* Windows / Linux / macOS
 * Python 3.10+
 * Git
-* Ollama
 * Streamlit
+* Ollama (optional)
+* Internet connection for cloud APIs
 
 ---
 
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/microplastic-ai-extractor.git
+git clone https://github.com/YOUR_USERNAME/microplastic-degradation-data-extractor-ai.git
 ```
 
-Move into the project:
+Enter the project:
 
 ```bash
-cd microplastic-ai-extractor
+cd microplastic-degradation-data-extractor-ai
 ```
 
 ---
@@ -415,92 +457,88 @@ cd microplastic-ai-extractor
 python -m venv .venv
 ```
 
-Activate it:
+Activate:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-If PowerShell blocks activation, you can alternatively use:
-
-```powershell
-.venv\Scripts\activate.bat
-```
-
 ---
 
-## 3. Install Python Dependencies
+## 3. Install Dependencies
 
 ```powershell
 python -m pip install -r requirements.txt
-```
-
-The main dependencies are:
-
-```text
-streamlit
-pandas
-python-dotenv
-openai
-pydantic
-ollama
-pymupdf
 ```
 
 ---
 
 # 🦙 Ollama Setup
 
-Ollama is the recommended option for development because it can run locally without OpenAI API credits.
+Install Ollama:
 
-Download Ollama:
+[Official Ollama Windows Download](https://ollama.com/download/windows?utm_source=chatgpt.com)
 
-[Ollama for Windows](https://ollama.com/download/windows?utm_source=chatgpt.com)
-
-After installation, open a **new terminal**.
-
-Check:
+Check installation:
 
 ```powershell
 ollama --version
 ```
 
----
-
-## Download the Model
+Download the model:
 
 ```powershell
 ollama pull llama3.1:8b
 ```
 
-Check installed models:
+Check:
 
 ```powershell
 ollama list
 ```
 
-You should see:
-
-```text
-NAME
-llama3.1:8b
-```
-
----
-
-## Test Ollama
+Test:
 
 ```powershell
 ollama run llama3.1:8b
 ```
 
-Then try:
+---
 
-```text
-What is polyethylene?
+# 🔑 API Configuration
+
+API keys/tokens should **never be hard-coded** into the Python files.
+
+Create a `.env` file:
+
+```env
+OPENAI_API_KEY=your_openai_key
+OPENAI_MODEL=your_openai_model
+
+GROK_API_KEY=your_grok_api_key
+GROK_MODEL=your_grok_model
+
+OLLAMA_MODEL=llama3.1:8b
 ```
 
-If the model responds, Ollama is ready.
+Use your actual provider credentials locally.
+
+### Important
+
+Do **not** upload `.env` to GitHub.
+
+The `.gitignore` should contain:
+
+```gitignore
+.env
+.venv/
+__pycache__/
+*.pyc
+*.zip
+
+data/raw/papers/*.pdf
+data/extracted/json/*.json
+```
 
 ---
 
@@ -512,97 +550,58 @@ From the project directory:
 python -m streamlit run app\streamlit_app.py
 ```
 
-Streamlit will open the application in your browser.
+The Streamlit interface will open in your browser.
 
-Select:
+Select the desired provider:
 
 ```text
-Extraction Provider
-        ↓
+OpenAI
 Ollama
-        ↓
-llama3.1:8b
+Grok
 ```
 
-Upload one or more research papers.
-
-Then click:
-
-```text
-🚀 Extract Data From All Papers
-```
-
----
-
-# 🔑 OpenAI Setup
-
-OpenAI can also be used as an extraction provider.
-
-Create a `.env` file in the project root.
-
-Example:
-
-```env
-OPENAI_API_KEY=your_api_key_here
-OPENAI_MODEL=your_model_here
-OLLAMA_MODEL=llama3.1:8b
-```
-
-**Never commit `.env` to GitHub.**
-
-The `.gitignore` file already excludes it.
+Then choose the corresponding model and upload your research papers.
 
 ---
 
 # 📁 Output
 
-The application provides two main outputs.
+The application generates two primary outputs.
 
 ## JSON
-
-Contains the complete structured extraction:
 
 ```text
 microplastic_extraction.json
 ```
 
-This preserves nested information such as endpoints and evidence.
-
----
+Contains the detailed structured extraction, including nested endpoints and evidence.
 
 ## CSV
-
-A simplified tabular dataset:
 
 ```text
 microplastic_experiments.csv
 ```
 
-Example:
-
-| Polymer | Treatment | Temperature |   pH | Duration | Initial Mass | Final Mass |
-| ------- | --------- | ----------: | ---: | -------: | -----------: | ---------: |
-| PS      | Plasma    |          25 | null |        2 |          100 |         82 |
-| PE      | Oxidation |          30 |    7 |       24 |           50 |         45 |
+Provides a simplified tabular representation suitable for further analysis.
 
 ---
 
-# 🔎 Provenance
+# 🔎 Evidence and Provenance
 
-Scientific data should be traceable back to its original source.
+Scientific data should remain traceable to its source.
 
-The project therefore attempts to preserve:
+The project attempts to preserve:
 
 ```text
 Source PDF
-    ↓
+     ↓
 Page
-    ↓
-Table/Figure
-    ↓
-Evidence text
-    ↓
-Extracted value
+     ↓
+Table / Figure
+     ↓
+Evidence Text
+     ↓
+Extracted Value
 ```
 
 For example:
@@ -617,15 +616,17 @@ For example:
 }
 ```
 
-This makes later manual verification possible.
+This allows extracted values to be manually checked against the original paper.
 
 ---
 
-# 📚 Research Dataset Design
+# 📚 Dataset Design
 
-The eventual dataset is intended to contain **one record per distinct experimental condition**.
+The intended dataset uses:
 
-For example, if a paper tests:
+> **One record per distinct experimental condition.**
+
+For example:
 
 ```text
 PS + Treatment A
@@ -633,58 +634,41 @@ PS + Treatment B
 PS + Treatment C
 ```
 
-these should become three separate experimental records rather than one combined record.
+should be represented as three separate experiments.
 
-This is important for later machine-learning analysis.
+This prevents different experimental conditions from being incorrectly combined.
 
 ---
 
-# 🤖 Future Machine Learning Pipeline
+# 🤖 Machine Learning Pipeline
 
-The extraction project is the first stage of a larger research pipeline.
-
-The planned architecture is:
+The extraction system is the first stage of a larger research workflow:
 
 ```text
-                RESEARCH PAPERS
-                       │
-                       ▼
-                 PDF Extraction
-                       │
-                       ▼
-                  AI Extraction
-                       │
-                       ▼
-              Structured Experiments
-                       │
-                       ▼
-             Evidence + Provenance
-                       │
-                       ▼
-                 Normalization
-                       │
-                       ▼
-                  Validation
-                       │
-                       ▼
-                Research Dataset
-                       │
-                       ▼
-              Exploratory Analysis
-                       │
-                       ▼
-              Feature Engineering
-                       │
-                       ▼
-                ML Development
-                       │
-             ┌─────────┴─────────┐
-             ▼                   ▼
-       Degradation          Treatment
-        Prediction          Optimization
+Research Papers
+      ↓
+AI Extraction
+      ↓
+Structured Experiments
+      ↓
+Evidence + Provenance
+      ↓
+Normalization
+      ↓
+Validation
+      ↓
+Research Dataset
+      ↓
+Exploratory Data Analysis
+      ↓
+Feature Engineering
+      ↓
+Machine Learning
+      ↓
+Degradation Analysis
 ```
 
-Potential ML targets include:
+Potential future prediction targets include:
 
 * degradation percentage
 * mass loss
@@ -698,37 +682,31 @@ Potential ML targets include:
 
 ---
 
-# 🧪 Planned Research Features
+# 🧪 Planned Improvements
 
-The current version is an initial extraction pipeline.
+## PDF Processing
 
-Future versions are planned to include:
-
-### PDF Processing
-
-* [ ] Better scanned-PDF support
-* [ ] OCR
-* [ ] Table extraction
+* [ ] OCR for scanned papers
+* [ ] Improved table extraction
 * [ ] Figure extraction
-* [ ] Supplementary-information extraction
+* [ ] Supplementary-information processing
 * [ ] Page-level provenance
 
-### Scientific Extraction
+## Scientific Extraction
 
-* [ ] Molecular-weight information
+* [ ] Molecular-weight changes
 * [ ] Surface-area changes
 * [ ] Carbonyl index
 * [ ] Crystallinity
 * [ ] Particle-size distribution
 * [ ] TOC/CO₂ mineralization
-* [ ] Chemical characterization
-* [ ] SEM information
-* [ ] FTIR information
-* [ ] XPS information
-* [ ] GC-MS information
-* [ ] GPC information
+* [ ] SEM data
+* [ ] FTIR data
+* [ ] XPS data
+* [ ] GC-MS data
+* [ ] GPC data
 
-### Dataset
+## Dataset
 
 * [ ] Unique paper ID
 * [ ] DOI
@@ -742,7 +720,7 @@ Future versions are planned to include:
 * [ ] Unit normalization
 * [ ] Duplicate detection
 
-### Machine Learning
+## Machine Learning
 
 * [ ] Exploratory data analysis
 * [ ] Feature engineering
@@ -757,134 +735,151 @@ Future versions are planned to include:
 
 # ⚠️ Current Limitations
 
-The current Ollama implementation primarily extracts the **text layer** of PDFs.
+The current extraction pipeline primarily works with the **text layer of PDFs**.
 
-Therefore, it may have difficulty with:
+It may therefore have difficulty with:
 
 * scanned PDFs
 * image-only pages
 * complicated tables
 * graphs
 * chemical structures
-* information contained only in figures
+* information available only in figures
 * supplementary information
 * equations
-* multi-column extraction errors
+* complex multi-column layouts
 
-A future version will incorporate specialized table extraction and vision-based processing.
+Future versions will improve table, figure, OCR, and vision-based extraction.
 
 ---
 
 # 🔬 Scientific Reliability
 
-This project is intended as a **research-assistance and data-curation tool**, not as a replacement for manual scientific verification.
+This project is a **research-assistance and data-curation tool**.
 
-AI-generated extraction should be checked against the original paper before the data is used for:
+AI extraction should be manually checked against the original research paper before the information is used for:
 
-* publication
+* scientific publication
 * statistical analysis
 * machine-learning training
 * scientific conclusions
 
-The project prioritizes:
+The core principle is:
 
 ```text
-Accuracy
-   >
-Completeness
-   >
-Automation
+Traceability
+     +
+Validation
+     +
+Evidence
+     +
+No fabricated values
 ```
 
-A missing value represented as `null` is preferable to an invented value.
+A missing value represented by `null` is preferable to an invented value.
 
 ---
 
-# 🔐 Data and Privacy
+# 🔐 Data Privacy
 
 Do not upload confidential or unpublished research papers to external AI services without appropriate authorization.
 
-When using Ollama, the model runs locally.
+### Ollama
 
-When using an external API provider, the paper content is processed through that provider's API according to its applicable terms and policies.
+Processing is performed locally on the user's machine.
 
----
+### Cloud APIs
 
-# 📜 License
+When using OpenAI or Grok, paper content is sent to the corresponding API for processing according to the provider's applicable terms and policies.
 
-This project is currently under development for research and educational purposes.
-
-A formal open-source license can be added when the project reaches a stable release.
+Never publish API keys or tokens in the repository.
 
 ---
 
-# 👨‍🔬 Project Context
+# 📈 Development History
 
-This project is being developed as part of research planning around:
+The project evolved through several extraction approaches.
 
-**Microplastic degradation, environmental chemistry, scientific data extraction, and machine learning.**
+### Stage 1 — OpenAI
 
-The long-term research direction is to combine:
+The first implementation used OpenAI for PDF information extraction.
+
+It provided a useful starting point for structured scientific extraction, but API costs became a concern when considering processing a large literature collection.
+
+### Stage 2 — Ollama
+
+Ollama was then introduced to provide a local alternative.
+
+This removed the need for API credits, but extraction speed was slower on local hardware.
+
+### Stage 3 — Grok API
+
+Grok API was added as a faster cloud-based extraction option.
+
+The current architecture therefore allows different providers to be tested using the same overall extraction pipeline.
+
+This makes it possible to later evaluate:
 
 ```text
-Chemistry
-+
-Environmental Science
-+
-Scientific Literature Mining
-+
-Machine Learning
-+
-Computational Modeling
+Extraction Speed
+       +
+Extraction Quality
+       +
+Cost
+       +
+Scientific Accuracy
 ```
 
-to investigate how different microplastic polymers respond to different degradation and treatment conditions.
+rather than depending on a single AI provider.
 
 ---
 
-# ⭐ Project Status
+# ⭐ Current Project Status
 
-**Current stage:** Active development
+**Status: Active Development**
 
-### Current working components
+### Completed
 
 * [x] Streamlit interface
 * [x] Multiple PDF upload
-* [x] Ollama integration
-* [x] OpenAI integration
+* [x] OpenAI extraction
+* [x] Ollama extraction
+* [x] Grok API integration
 * [x] Pydantic structured schema
-* [x] Basic normalization
+* [x] Polymer normalization
 * [x] Basic validation
 * [x] JSON export
 * [x] CSV export
 * [x] Evidence/provenance fields
 
-### In development
+### In Development
 
-* [ ] Better table extraction
+* [ ] Advanced table extraction
 * [ ] Figure/graph extraction
 * [ ] OCR
 * [ ] Improved scientific validation
 * [ ] Larger literature dataset
-* [ ] ML-ready feature engineering
-* [ ] Degradation prediction model
+* [ ] Advanced unit normalization
+* [ ] ML feature engineering
+* [ ] Degradation prediction
+* [ ] Treatment optimization
 
 ---
 
-# 📌 Important Principle
+# 📌 Core Principle
 
-> **The goal is not simply to extract more data. The goal is to build a traceable, scientifically defensible dataset that can support reliable downstream analysis and machine learning.**
+> **The goal is not simply to extract more data. The goal is to build a traceable and scientifically defensible dataset that can support reliable downstream analysis and machine learning.**
 
 ---
 
-## Author
+# 👨‍🔬 Author
 
 **Sidhant Patel**
 
-BS Chemical Science
-Indian Institute of Technology Mandi
+**BS Chemical Science**
+**Indian Institute of Technology Mandi**
 
-Research interests:
+### Research Interests
 
 * Microplastic degradation
 * Environmental chemistry
@@ -893,3 +888,9 @@ Research interests:
 * Machine learning for chemistry
 * Scientific data extraction
 * AI-assisted scientific research
+
+---
+
+## Project Description
+
+> **Fast AI-powered extraction of structured experimental data from microplastic research papers using Grok, Ollama, and OpenAI, with a focus on building traceable ML-ready datasets.**
